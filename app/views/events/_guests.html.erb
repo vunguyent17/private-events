@@ -1,0 +1,23 @@
+<div class="dual-listbox event_guest_ids">
+  <div class="dual-listbox__container">
+    <div>
+      <input id="searchleft" class="dual-listbox__search form-control" placeholder="Search username">
+      <div class="dual-listbox__title text-secondary mt-3">Username search result</div>
+      <div id="username-list">
+        <%= form.collection_select :user_search, {}, {}, {}, {}, { :multiple => true, :size => 10, class: "form-select" } %>
+      </div>
+    </div>
+    <div class="dual-listbox__buttons">
+      <button id="addbtn" type="button" class="dual-listbox__button btn btn-primary m-2">&gt;</button>
+      <button id="removebtn" type="button" class="dual-listbox__button btn btn-primary m-2">&lt;</button>
+      <button id="removeAllbtn" type="button" class="dual-listbox__button btn btn-primary m-2">&lt;&lt;</button>
+    </div>
+    <div>
+      <input id="searchright" class="dual-listbox__search form-control" placeholder="Search guest">
+      <div class="dual-listbox__title text-secondary mt-3">Guests included in this event</div>
+      <div id="guest-selected">
+      <%= form.collection_select :guest_ids, @event.guests, :id, :username, {}, { :multiple => true, :size => 10, class: "form-select" } %>
+      </div>
+    </div>
+  </div>
+</div>

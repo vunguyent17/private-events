@@ -1,0 +1,21 @@
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="d-flex justify-content-between">
+      <div>
+        <h3 class="card-title"><%= link_to event.name, event_path(event.id), class:"text-decoration-none "%></h3>
+        <% if event.end_time < Time.now %>
+          <span class="badge rounded-pill text-bg-warning">This event has ended</span>
+        <% else %>
+        <span class="badge rounded-pill text-bg-light">This event will start in <%= time_ago_in_words(event.start_time) %></span>
+        <% end %>
+      </div>
+      <small class="text-secondary text-end" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<%= event.created_at.localtime.strftime('%B %e, %Y at %l:%M %p') %>">created <%= time_ago_in_words(event.created_at) %> ago</small>
+    </div>
+    <p class="card-text">
+      <p><span class="badge rounded-pill text-bg-light">Hosted by <%= link_to event.host.username, show_profile_path(event.host.username) %></span>
+        <span class="badge rounded-pill text-bg-light"><i class="bi bi-geo-alt"></i> <%= event.location%></span></p>
+      <p><span class="badge rounded-pill text-bg-light"><i class="bi bi-calendar-event"></i> Start: <%= event.start_time.localtime.strftime('%b %e, %Y at %l:%M %p (GMT%Z)') %> </span> <i class="bi bi-arrow-right"></i>
+        <span class="badge rounded-pill text-bg-light"><i class="bi bi-calendar-event"></i> End: <%= event.end_time.localtime.strftime('%b %e, %Y at %l:%M %p (GMT%Z)')%> </span></p>
+    </p>
+  </div>
+</div>

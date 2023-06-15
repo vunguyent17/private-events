@@ -1,0 +1,16 @@
+<%= content_for :addscript do %>
+  <%= javascript_import_module_tag "custom-scripts/tooltip" %>
+<% end %>
+<div class="container my-2">
+  <div class="row">
+    <div class="col-md-9">
+      <%= render @events %>
+    </div>
+    <div class="col-md-3">
+      <div class="p-5 mb-2 bg-light rounded-2">
+        <p>Create an event now</p>
+        <%= link_to "Create new event", new_event_path, class: "btn btn-outline-primary p-2" %>
+      </div>
+    </div>
+  </div>
+</div>

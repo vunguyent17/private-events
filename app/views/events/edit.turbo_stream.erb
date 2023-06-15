@@ -1,0 +1,9 @@
+<turbo-stream action="replace" target="username-list">
+  <template id="username-list-template">
+    <div id="username-list" data-controller="username-list">
+      <%= form_with model: @event, local: true, html: { method: :put } do |form| %>
+        <%= form.collection_select :user_search, @users, :id, :username, {}, { :multiple => true, :size => 10, class: "form-select", data: {"username-list-target": "filterable"} } %>
+      <%end%>
+    </div>
+  </template>
+</turbo-stream>

@@ -1,0 +1,65 @@
+ <%= content_for :addscript do %>
+  <%= javascript_import_module_tag "custom-scripts/set_timezone" %>
+<% end %>
+  <main>
+  <div class="card mx-auto my-4" style="width: 50rem;">
+    <div class="card-body">
+      <h3 class="card-title text-center" id="newEventTitle">Create new event</h3>
+      <p class="card-text">
+        <% if @event.errors.any? %>
+          <div id="error_explanation alert alert-warning alert-dismissible fade show" role="alert">
+            <h2><%= pluralize(@event.errors.count, "error") %> prohibited this event from being created:</h2>
+            <ul>
+              <% @event.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <% end %>
+        <p>Hosted by: <%= link_to current_user.username, show_profile_path(current_user.username) %>
+        <%= form_with model: @event, local: true do |form| %>
+          <div class="field mb-4">
+            <%= form.label :name, class: "form-label" %><br />
+            <%= form.text_field :name, placeholder: "Event's name", class:"form-control"%>
+          </div>
+          <div class="field mb-4">
+            <%= form.label :location, class: "form-label" %><br />
+            <%= form.text_field :location, placeholder: "Location", class:"form-control"%>
+          </div>
+          <div class="row g-2">
+            <div class="col-md">
+              <div class="field mb-4">
+                <%= form.label :start_time, class: "form-label" %><br />
+                <%= form.datetime_field :start_time, class:"form-control", value: Time.now.strftime("%Y-%m-%dT%H:%M") %>
+                <small id="show_start_time" class="text-secondary"></small>
+              </div>
+            </div>
+            <div class="col-md">
+              <div class="field mb-4">
+                <%= form.label :end_time, class: "form-label" %><br />
+                <%= form.datetime_field :end_time, class:"form-control", value: Time.now.strftime("%Y-%m-%dT%H:%M")%>
+                <small id="show_end_time" class="text-secondary"></small>
+              </div>
+            </div>
+          </div>
+          <div class="field mb-4">
+            <%= form.label :time_zone, class: "form-label" %><br />
+            <%= form.select :time_zone, ActiveSupport::TimeZone.all.collect {|tz| ["(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name]}, {}, {class: "form-select"} %>
+          </div>
+          <div class="field mb-4">
+            <%= form.label :note, class: "form-label" %><br />
+            <%= form.text_area :note, placeholder: "Additional note", class:"form-control"%>
+          </div>
+          <div class="field mb-4">
+            <%= form.label :guests, class: "form-label" %><br />
+            <%= form.collection_select :guest_ids, User.where("id != ?", current_user.id), :id, :username, {}, { :multiple => true, :size => 5, class: "form-select" } %>
+          </div>
+          <div class="actions d-grid gap-2 col-12 mx-auto mb-4">
+            <%= form.submit "Add new event", class:"btn btn-primary d-md-block" %>
+          </div>
+        <% end %>
+      </p>
+    </div>
+  </div>
+</main>

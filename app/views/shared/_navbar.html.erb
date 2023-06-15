@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm p-2 mb-3">
+  <div class="container">
+    <%= link_to "Private Events", root_path, class: 'navbar-brand' %>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <%# <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    </form> %>
+      <ul class="nav navbar-nav">
+        <li class="nav-item">
+          <button class="btn btn-white" type="button" data-bs-toggle="collapse" data-bs-target="#clockDisplay" aria-expanded="false" aria-controls="clockDisplay"><i class="bi bi-clock me-2"></i>Now <i class="bi bi-chevron-right"></i></button>
+        </li>
+        <li class="navbar-text">
+          <div class="collapse collapse-horizontal text-nowrap hstack gap-3 small fw-light mx-3" id="clockDisplay" onload="showTime()">
+            <span id="dateNow" ></span>
+            <div class="vr"></div>
+            <span id="timeNow"></span>
+            <div class="vr"></div>
+            <span id="timezoneNow" ></span>
+          </div>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav ms-auto">
+        <% if user_signed_in? %>
+          <li class="nav-item dropdown">
+            <%= link_to current_user.username, root_path, class:"nav-link dropdown-toggle", role: "button", "data-bs-toggle" => "dropdown", "aria-expanded" => "false" %>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><%= link_to "Profile", show_profile_path(current_user.username), class:"dropdown-item"%></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><%= button_to 'Log out', destroy_user_session_path, class: 'dropdown-item', :method => :delete %></li>
+            </ul>
+          </li>
+        <% else %>
+          <% unless current_page?(new_user_session_path) || current_page?(new_user_registration_path)  %>
+            <li class="nav-item">
+              <%= link_to 'Login', new_user_session_path, class: 'btn btn-primary mx-2', type: 'button', data: { disable_with: "Redirecting..." } %>
+            </li>
+            <li class="nav-item">
+              <%= link_to 'Sign up', new_user_registration_path, class: 'btn btn-outline-primary mx-2', type: 'button', data: { disable_with: "Redirecting..." } %>
+            </li>
+          <%end%>
+        <%end%>
+      </ul>
+    </div>
+  </div>
+</nav>
