@@ -1,0 +1,7 @@
+<%= turbo_frame_tag frame_name do  %>
+  <% if events.count == 0 %>
+    <%= render 'empty' %>
+  <% else %>
+    <%= render events.order(created_at: :desc) %>
+  <% end %>
+<% end %>

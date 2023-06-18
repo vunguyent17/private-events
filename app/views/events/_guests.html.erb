@@ -1,4 +1,4 @@
-<div class="dual-listbox event_guest_ids">
+<div class="dual-listbox event_guest_ids my-3">
   <div class="dual-listbox__container">
     <div>
       <input id="searchleft" class="dual-listbox__search form-control" placeholder="Search username">
@@ -12,12 +12,11 @@
       <button id="removebtn" type="button" class="dual-listbox__button btn btn-primary m-2">&lt;</button>
       <button id="removeAllbtn" type="button" class="dual-listbox__button btn btn-primary m-2">&lt;&lt;</button>
     </div>
-    <div>
-      <input id="searchright" class="dual-listbox__search form-control" placeholder="Search guest">
+    <div data-controller="guest-filter">
+      <input id="searchright" class="dual-listbox__search form-control" placeholder="Search guest" data-action="input->guest-filter#filter" data-guest-filter-target="source">
       <div class="dual-listbox__title text-secondary mt-3">Guests included in this event</div>
       <div id="guest-selected">
-      <%= form.collection_select :guest_ids, @event.guests, :id, :username, {}, { :multiple => true, :size => 10, class: "form-select" } %>
+      <%= form.collection_select :guest_ids, @event.guests, :id, :username, {}, { :multiple => true, :size => 10, class: "form-select", data: {"guest-filter-target": "filterable"} } %>
       </div>
-    </div>
   </div>
 </div>

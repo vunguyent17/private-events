@@ -12,13 +12,13 @@
         <li class="nav-item">
           <button class="btn btn-white" type="button" data-bs-toggle="collapse" data-bs-target="#clockDisplay" aria-expanded="false" aria-controls="clockDisplay"><i class="bi bi-clock me-2"></i>Now <i class="bi bi-chevron-right"></i></button>
         </li>
-        <li class="navbar-text">
-          <div class="collapse collapse-horizontal text-nowrap hstack gap-3 small fw-light mx-3" id="clockDisplay" onload="showTime()">
-            <span id="dateNow" ></span>
+        <li class="navbar-text" data-controller="clock">
+          <div class="collapse collapse-horizontal text-nowrap hstack gap-3 small fw-light mx-3" id="clockDisplay">
+            <span id="dateNow" data-clock-target="date"></span>
             <div class="vr"></div>
-            <span id="timeNow"></span>
+            <span id="timeNow" data-clock-target="time"></span>
             <div class="vr"></div>
-            <span id="timezoneNow" ></span>
+            <span id="timezoneNow" data-clock-target="timezone"></span>
           </div>
         </li>
       </ul>

@@ -5,9 +5,9 @@ export default class extends Controller {
   static targets = ["filterable"];
   connect() {
     let selectedValues = this.getSelectValues();
-    this.filterableTargets[0].childNodes.forEach((node) => {
+    this.filterableTarget.childNodes.forEach((node) => {
       if (node.nodeName == "OPTION" && selectedValues.includes(node.value)) {
-        this.filterableTargets[0].removeChild(node);
+        this.filterableTarget.removeChild(node);
       }
     });
   }
@@ -26,13 +26,4 @@ export default class extends Controller {
     }
     return result;
   }
-
-  // filter(event) {
-  //   let lowerCaseFilterTerm = this.sourceTarget.value.toLowerCase()
-
-  //   this.filterableTargets.forEach((el, i) => {
-  //     let filterableKey =  el.getAttribute("data-filter-key")
-
-  //     el.classList.toggle("filter--notFound", !filterableKey.includes( lowerCaseFilterTerm ) )
-  //   })
 }

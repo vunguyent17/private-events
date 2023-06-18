@@ -38,15 +38,15 @@
                   <td><%= @event.location%></td>
                 </tr>
                 <tr>
-                  <th scope="row">Time start</th>
+                  <th scope="row" class="text-nowrap">Time start</th>
                   <td><%= @event.start_time.localtime.strftime('%A, %B %e, %Y at %l:%M %p (GMT%Z)') %> </td>
                 </tr>
                 <tr>
-                  <th scope="row">Time end</th>
+                  <th scope="row" class="text-nowrap"> Time end</th>
                   <td><%= @event.end_time.localtime.strftime('%A, %B %e, %Y at %l:%M %p (GMT%Z)')%> </td>
                 </tr>
                 <tr>
-                  <th scope="row">Guest list</th>
+                  <th scope="row" class="text-nowrap">Guest list</th>
                   <td><%= safe_join(@event.guests.pluck(:username).map { |u| link_to(u, show_profile_path(u)) }, ", ".html_safe) %> </td>
                 </tr>
                 <tr>

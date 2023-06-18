@@ -13,24 +13,12 @@ class EventsController < ApplicationController
 
   def new
     @event = Event.new
+    search_user_handler()
   end
 
   def edit
     @event = Event.find(params[:id]) or not_found
-    search_params = allowed_search_user_params
-
-    if search_params[:query].present?
-      @users = User.where('username like ?', "#{search_params[:query]}%").limit(10)
-    else
-      @users = User.none
-    end
-
-    if search_params[:query].present?
-      respond_to do |format|
-        format.turbo_stream
-        # format.html { redirect_to edit_event_path(search_params[:id]) }
-      end
-    end
+    search_user_handler()
   end
 
   def update
@@ -43,7 +31,7 @@ class EventsController < ApplicationController
       if @event.update(event_params)
         @event.guest_ids = allowed_guest_params[:guest_ids]
         format.html { redirect_to(@event,
-                      :notice => 'Post was successfully updated.') }
+                      :notice => 'This event was successfully updated.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -112,6 +100,22 @@ class EventsController < ApplicationController
   end
 
   private
+
+  def search_user_handler
+    search_params = allowed_search_user_params
+
+    if search_params[:query].present?
+      @users = User.where('username like ?', "#{search_params[:query]}%").limit(10)
+    else
+      @users = User.none
+    end
+
+    if search_params[:query].present?
+      respond_to do |format|
+        format.turbo_stream
+      end
+    end
+  end
 
   def not_found
     raise ActionController::RoutingError.new('Not Found')

@@ -2,10 +2,12 @@ window.addEventListener("turbo:load", dualListboxScripts);
 dualListboxScripts();
 
 function dualListboxScripts() {
-  addSearchActions();
-  addButtonActions();
-  addSubmitAction ();
-  
+  if (document.querySelector("#event-form")!== null)
+  {
+    addSearchActions();
+    addButtonActions();
+    addSubmitAction ();
+  }  
 }
 function addSubmitAction (){
   let formEvent = document.querySelector("#event-form");
@@ -24,20 +26,13 @@ function submitEventForm (e) {
 
 function addSearchActions() {
   let search_left = document.getElementById("searchleft");
-  let search_right = document.getElementById("searchright");
-  let selectedList = document.getElementById("guest-selected");
   search_left.addEventListener("change", (t) =>
     searchListsLeft(t.target.value)
-  ),
+  );
     search_left.addEventListener("keyup", (t) =>
       searchListsLeft(t.target.value)
-    ),
-    search_right.addEventListener("change", (t) =>
-      searchListsRight(t.target.value, selectedList)
-    ),
-    search_right.addEventListener("keyup", (t) =>
-      searchListsRight(t.target.value, selectedList)
     );
+    
 }
 
 function searchListsLeft(targetValue) {
@@ -70,16 +65,7 @@ function searchListsLeft(targetValue) {
   xhttp.send(FD);
 }
 
-function searchListsRight(t, e) {
-  let s = e.querySelectorAll(`.dual-listbox__item`),
-    i = t.toLowerCase();
-  for (let a = 0; a < s.length; a++) {
-    let l = s[a];
-    l.textContent.toLowerCase().indexOf(i) === -1
-      ? (l.style.display = "none")
-      : (l.style.display = "list-item");
-  }
-}
+
 
 function addButtonActions() {
   let add_button = document.getElementById("addbtn");

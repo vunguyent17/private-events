@@ -1,5 +1,4 @@
 window.addEventListener("turbo:load", function () {
-  console.log("tooltip");
   const tooltipTriggerList = document.querySelectorAll(
     '[data-bs-toggle="tooltip"]'
   );

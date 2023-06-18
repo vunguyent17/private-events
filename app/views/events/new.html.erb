@@ -1,7 +1,7 @@
- <%= content_for :addscript do %>
-  <%= javascript_import_module_tag "custom-scripts/set_timezone" %>
+<%= content_for :addscript do %>
+  <%= javascript_import_module_tag "dual-listbox/dual-listbox" %>
 <% end %>
-  <main>
+<main>
   <div class="card mx-auto my-4" style="width: 50rem;">
     <div class="card-body">
       <h3 class="card-title text-center" id="newEventTitle">Create new event</h3>
@@ -18,48 +18,50 @@
           </div>
         <% end %>
         <p>Hosted by: <%= link_to current_user.username, show_profile_path(current_user.username) %>
-        <%= form_with model: @event, local: true do |form| %>
-          <div class="field mb-4">
-            <%= form.label :name, class: "form-label" %><br />
-            <%= form.text_field :name, placeholder: "Event's name", class:"form-control"%>
-          </div>
-          <div class="field mb-4">
-            <%= form.label :location, class: "form-label" %><br />
-            <%= form.text_field :location, placeholder: "Location", class:"form-control"%>
-          </div>
-          <div class="row g-2">
-            <div class="col-md">
+          <%= form_with model: @event, local: true, html: { method: :post, id: "event-form" } do |form| %>
+            <div class="field mb-4">
+              <%= form.label :name, class: "form-label" %><br />
+              <%= form.text_field :name, placeholder: "Event's name", class:"form-control"%>
+            </div>
+            <div class="field mb-4">
+              <%= form.label :location, class: "form-label" %><br />
+              <%= form.text_field :location, placeholder: "Location", class:"form-control"%>
+            </div>
+            <div data-controller="timezone">
+              <div class="row g-2">
+                <div class="col-md">
+                  <div class="field mb-4">
+                    <%= form.label :start_time, class: "form-label" %><br />
+                    <%= form.datetime_field :start_time, class:"form-control", data: {"timezone-target": "startTimeInput", "action": "input->timezone#show_start_time_info"}, value: Time.now.strftime("%Y-%m-%dT%H:%M") %>
+                    <small id="show_start_time" class="text-secondary" data-timezone-target="startTimeText"></small>
+                  </div>
+                </div>
+                <div class="col-md">
+                  <div class="field mb-4">
+                    <%= form.label :end_time, class: "form-label" %><br />
+                    <%= form.datetime_field :end_time, class:"form-control", data: {"timezone-target": "endTimeInput", "action": "input->timezone#show_end_time_info"}, value: Time.now.strftime("%Y-%m-%dT%H:%M")%>
+                    <small id="show_end_time" class="text-secondary" data-timezone-target="endTimeText"></small>
+                  </div>
+                </div>
+              </div>
               <div class="field mb-4">
-                <%= form.label :start_time, class: "form-label" %><br />
-                <%= form.datetime_field :start_time, class:"form-control", value: Time.now.strftime("%Y-%m-%dT%H:%M") %>
-                <small id="show_start_time" class="text-secondary"></small>
+                <%= form.label :time_zone, class: "form-label" %><br />
+                <%= form.select :time_zone, ActiveSupport::TimeZone.all.collect {|tz| ["(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name]}, {}, {class: "form-select","data-timezone-target": "timezoneSelect"} %>
               </div>
             </div>
-            <div class="col-md">
-              <div class="field mb-4">
-                <%= form.label :end_time, class: "form-label" %><br />
-                <%= form.datetime_field :end_time, class:"form-control", value: Time.now.strftime("%Y-%m-%dT%H:%M")%>
-                <small id="show_end_time" class="text-secondary"></small>
-              </div>
+            <div class="field mb-4">
+              <%= form.label :note, class: "form-label" %><br />
+              <%= form.text_area :note, placeholder: "Additional note", class:"form-control"%>
             </div>
-          </div>
-          <div class="field mb-4">
-            <%= form.label :time_zone, class: "form-label" %><br />
-            <%= form.select :time_zone, ActiveSupport::TimeZone.all.collect {|tz| ["(GMT#{ActiveSupport::TimeZone.seconds_to_utc_offset(tz.utc_offset)}) #{tz.name}", tz.tzinfo.name]}, {}, {class: "form-select"} %>
-          </div>
-          <div class="field mb-4">
-            <%= form.label :note, class: "form-label" %><br />
-            <%= form.text_area :note, placeholder: "Additional note", class:"form-control"%>
-          </div>
-          <div class="field mb-4">
-            <%= form.label :guests, class: "form-label" %><br />
-            <%= form.collection_select :guest_ids, User.where("id != ?", current_user.id), :id, :username, {}, { :multiple => true, :size => 5, class: "form-select" } %>
-          </div>
-          <div class="actions d-grid gap-2 col-12 mx-auto mb-4">
-            <%= form.submit "Add new event", class:"btn btn-primary d-md-block" %>
-          </div>
-        <% end %>
-      </p>
+            <div class="field mb-4">
+              <%= form.label :guests, class: "form-label" %><br />
+              <%= render partial: "events/guests", formats: [:html], :locals => {:guests =>  @event.guests, :form => form} %>
+            </div>
+            <div class="actions d-grid gap-2 col-12 mx-auto mb-4">
+              <%= form.submit "Add new event", class:"btn btn-primary d-md-block" %>
+            </div>
+          <% end %>
+        </p>
+      </div>
     </div>
-  </div>
-</main>
+  </main>

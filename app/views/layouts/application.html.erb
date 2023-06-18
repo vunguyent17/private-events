@@ -13,7 +13,6 @@
     <%= javascript_include_tag "turbo", type: "module-shim" %> 
     <%= javascript_importmap_tags %>
     <%= yield(:addscript) %>
-    <%= javascript_import_module_tag "custom-scripts/show_clock" %>
     <body style="overflow-y: scroll;">
       <% if notice %>
         <div class="alert alert-success alert-dismissible fade show m-2" role="alert">

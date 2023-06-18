@@ -2,21 +2,28 @@
 
 class ProfilesController < ApplicationController  
   def show
+
     @profile = User.find_by(username: params[:username]) or not_found
-    @events_host_filter = "all"
-    @events_invited_filter = "all"
-    if (params[:eventFilter])
-      filter = params[:eventFilter].split("-")
-      if (filter[0]== "host")
-        @events_host_filter = filter[1]
+    event_params = allowed_event_params
+
+    if turbo_frame_request?
+      puts "Here"
+      if event_params[:hosted_filter].present?
+        render partial: "profiles/event_frame", locals: {events: @profile.events.send(event_params[:hosted_filter]), frame_name: "events-hosted" }
       else
-        @events_invited_filter = filter[1]
+        render partial: "profiles/event_frame", locals: {events: @profile.invited_events.send(event_params[:invited_filter]), frame_name: "events-invited" }
       end
+    else
+      render :show
     end
   end
 
   private
   def not_found
     raise ActionController::RoutingError.new('Not Found')
+  end
+
+  def allowed_event_params
+    params.permit(:hosted_filter, :invited_filter, :username)
   end
 end

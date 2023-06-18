@@ -1,0 +1,13 @@
+<div class="<%= tab_name == 'events-hosted' ? 'tab-pane fade active show' : 'tab-pane fade' %>" id=<%="v-pills-#{tab_name}" %> role="tabpanel" aria-labelledby=<%="v-pills-#{tab_name}"%> tabindex="0">
+  <%= form_with(url: show_profile_path(profile.username), method: :get, data: {turbo_frame:tab_name}) do |form| %>
+    <%= form.select tab_name == "events-hosted"? :hosted_filter : :invited_filter,
+    ["all", "incoming", "overdue"].map { |v| 
+    [ "#{v.capitalize} (#{tab_name=="events-hosted" ? profile.events.send(v).count : profile.invited_events.send(v).count})", v ] },
+     {}, {class: 'form-select m-2 w-25', onchange: "this.form.requestSubmit()"} %>
+  <% end %>
+  <div>
+    <%= render partial: "profiles/event_frame",
+    locals: {events: tab_name == "events-hosted"? profile.events.send("all") : profile.invited_events.send("all"),
+    frame_name: tab_name } %>
+  </div>
+</div>
