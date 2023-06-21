@@ -5,10 +5,12 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <%# <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-    </form> %>
       <ul class="nav navbar-nav">
+        <li class="nav-item mx-2">
+          <%= form_with(url: root_path, method: :get) do |form| %>
+            <%= form.text_field :search_name, placeholder: "Search event ..." , class:"form-control", type: "search", onchange: "this.form.submit()", value: search_name %>
+          <% end %>
+        </li>
         <li class="nav-item">
           <button class="btn btn-white" type="button" data-bs-toggle="collapse" data-bs-target="#clockDisplay" aria-expanded="false" aria-controls="clockDisplay"><i class="bi bi-clock me-2"></i>Now <i class="bi bi-chevron-right"></i></button>
         </li>

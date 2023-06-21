@@ -4,7 +4,15 @@ class EventsController < ApplicationController
   before_action :authenticate_user!, only: %i[new create show edit update delete add_guest remove_guest]
 
   def index
-    @events = Event.all.order(created_at: :desc)
+    search_params = allowed_event_search_params
+
+    if search_params[:search_name].present?
+      @events = Event.where('lower(name) like ?', "%#{search_params[:search_name]}%".downcase).order(created_at: :desc)
+      @search_name = search_params[:search_name]
+    else
+      @events = Event.all.order(created_at: :desc)
+      @search_name = ""
+    end
   end
 
   def show
@@ -119,6 +127,10 @@ class EventsController < ApplicationController
 
   def not_found
     raise ActionController::RoutingError.new('Not Found')
+  end
+
+  def allowed_event_search_params
+    params.permit(:search_name)
   end
 
   def allowed_event_params
