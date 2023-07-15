@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function (e) {
   e.preventDefault();
   change_tab_event();
   let nodes = document.getElementsByName("event[filter]");
-  if (nodes !== []) {
+  if (nodes.length !== 0) {
     nodes.forEach((node) => {
       node.addEventListener("change", (e) => {
         let url = window.location.href;

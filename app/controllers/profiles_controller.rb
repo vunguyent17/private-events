@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-class ProfilesController < ApplicationController  
+class ProfilesController < ApplicationController 
+  before_action :authenticate_user!, only: %i[show] 
   def show
-
     @profile = User.find_by(username: params[:username]) or not_found
     event_params = allowed_event_params
 
     if turbo_frame_request?
-      puts "Here"
       if event_params[:hosted_filter].present?
         render partial: "profiles/event_frame", locals: {events: @profile.events.send(event_params[:hosted_filter]), frame_name: "events-hosted" }
       else
